@@ -3,10 +3,43 @@ import cloudy from '../assets/images/cloudy.jpg'
 import rainny from '../assets/images/rainny.jpg'
 import snowy from '../assets/images/snowy.jpg'
 import foggy from '../assets/images/foggy.jpg'
-
+import { useState, useEffect } from 'react'
+import SearchableDropdown from './SearchableDropdown'
 
 
 const WeatherApp = () => {
+    const [cities, setCities] = useState("Select option...");
+    const [loading, setLoading] = useState(true);
+
+    // const search = async () => {
+    //     const url = `https://api.allorigins.win/get?url=https://api.meteo.lt/v1/places/vilnius/forecasts/long-term`;
+    //     const res = await fetch(url)
+    //     const searchData = await res.json()
+    //     console.log(searchData)
+    // }
+
+    useEffect(() => {
+        const fetchWeather = async () => {
+          const url = `https://api.allorigins.win/get?url=https://api.meteo.lt/v1/places`;
+          try {
+            const response = await fetch(url);
+            const data = await response.json();
+            const parsedData = JSON.parse(data.contents);
+            console.log(parsedData);
+            setCities(parsedData);
+          } catch (error) {
+            console.error('Error fetching weather data:', error);
+          }
+        };
+        fetchWeather();
+      }, []);
+    
+
+    if (loading) {
+        // Render a loading indicator while waiting for the API data
+        return <div>Loading...</div>;
+      }    
+
   return (
     <div className="container"> 
         <div className="weather-app">
@@ -15,10 +48,14 @@ const WeatherApp = () => {
                    <i className="fas fa-crosshairs"></i>
                    <div className="location">Vilnius</div> 
                 </div>
-                <div className="search-bar">
-                    <input type="text" placeholder="Search location here"/>
-                    <i className="fas fa-search"></i>
-                </div>
+                {/* <div className="search-bar"> */}
+                <SearchableDropdown
+                    options={cities}
+                    label="name"
+                    id="id"
+                    selectedVal={""}
+                    handleChange={(val) => {}}
+      />
             </div>
             <div className="weather-info">
                 <img src={sunny} height="200" alt="sunny" className=""/>
@@ -30,7 +67,6 @@ const WeatherApp = () => {
             <div className="weather-date">
                 <p>Monday, 31 March</p>
             </div>
-            <div class="weather-data"></div>
         </div>
     </div>
   )
