@@ -21,7 +21,7 @@ const WeatherApp = () => {
                 </div>
             </div>
             <div className="weather-info">
-                <img src={sunny} alt="sunny" className=""/>
+                <img src={sunny} height="200" alt="sunny" className=""/>
                 <div className="temperature">20°C</div>
                 <div className="description">Sunny</div>
                 <div className="humidity"><i className="fa fa-tint"></i>Humidity: 60%</div>

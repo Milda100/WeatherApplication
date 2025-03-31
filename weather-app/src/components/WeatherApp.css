@@ -1,5 +1,60 @@
 .container {
     width: 100%;
     height: 100vh;
-    background-image: linear-gradient(to bottom, #87CEEB, #FF6347);
+    background-image: linear-gradient(to bottom, var(--lightBlue), var(--red));
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
+
+.weather-info img {
+    display: none;
+}
+
+.weather-app {
+    width: 300px;
+    height: 400px;
+    background-image: linear-gradient(to right, var(--lightBlue), var(--white));
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    box-shadow: 0 4px 20px var(--darkBrown);
+}
+
+.search {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+}
+
+.search-top {
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
+    font-size: 20px;
+    color: var(--darkBrown);
+}
+
+.search-bar input{
+    width: 250px;
+    height: 35px;
+    background-color: transparent;
+    border: 3px solid var(--darkBrown);
+    border-radius: 10px;
+    outline: none;
+    padding: 10px 30px 10px 10px;
+    font-size: 16px;
+    color: var(--darkBrown);
+}
+
+.search-bar input::placeholder {
+    color: var(--darkBrown);
+    font-size: 16px;
+}
+
+.search-bar input:focus::placeholder {
+    color: transparent;
+}
+
