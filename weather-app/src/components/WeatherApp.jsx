@@ -8,7 +8,7 @@ import foggy from '../assets/images/foggy.jpg'
 
 const WeatherApp = () => {
   return (
-    <div className="container">
+    <div className="container"> 
         <div className="weather-app">
             <div className="search">
                 <div className="search-top">
@@ -24,9 +24,13 @@ const WeatherApp = () => {
                 <img src={sunny} alt="sunny" className=""/>
                 <div className="temperature">20°C</div>
                 <div className="description">Sunny</div>
-                <div className="humidity">Humidity: 60%</div>
-                <div className="wind-speed">Wind Speed: 10 km/h</div>
+                <div className="humidity"><i className="fa fa-tint"></i>Humidity: 60%</div>
+                <div className="wind-speed"><i className="fas fa-wind"></i>Wind Speed: 10 km/h</div>
             </div>
+            <div className="weather-date">
+                <p>Monday, 31 March</p>
+            </div>
+            <div class="weather-data"></div>
         </div>
     </div>
   )
