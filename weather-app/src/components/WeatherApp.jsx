@@ -11,15 +11,9 @@ const WeatherApp = () => {
     const [cities, setCities] = useState("Select option...");
     const [loading, setLoading] = useState(true);
 
-    // const search = async () => {
-    //     const url = `https://api.allorigins.win/get?url=https://api.meteo.lt/v1/places/vilnius/forecasts/long-term`;
-    //     const res = await fetch(url)
-    //     const searchData = await res.json()
-    //     console.log(searchData)
-    // }
 
     useEffect(() => {
-        const fetchWeather = async () => {
+        const fetchCities = async () => {
           const url = `https://api.allorigins.win/get?url=https://api.meteo.lt/v1/places`;
           try {
             const response = await fetch(url);
@@ -27,11 +21,12 @@ const WeatherApp = () => {
             const parsedData = JSON.parse(data.contents);
             console.log(parsedData);
             setCities(parsedData);
+            setLoading(false); // Set loading to false after data is fetched
           } catch (error) {
             console.error('Error fetching weather data:', error);
           }
         };
-        fetchWeather();
+        fetchCities();
       }, []);
     
 
