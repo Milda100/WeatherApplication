@@ -42,6 +42,14 @@
     color: var(--darkBrown);
 }
 
+.recent-cities {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    font-size: 16px;
+    color: var(--darkBrown);
+}
+
 
 .weather-info {
     position: absolute;

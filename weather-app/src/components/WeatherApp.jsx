@@ -11,6 +11,7 @@ const WeatherApp = () => {
     const [cities, setCities] = useState([])
     const [loading, setLoading] = useState(true);
     const [selectedCity, setSelectedCity] = useState(null);
+    const [mostViewedCities, setMostViewedCities] = useState([]);
     
 
     useEffect(() => {
@@ -28,7 +29,24 @@ const WeatherApp = () => {
           }
         };
         fetchCities();
+
+        const storedCities = JSON.parse(localStorage.getItem("mostViewedCities")) || [];
+        setMostViewedCities(storedCities);
       }, []);
+
+        const handleCitySelect = (city) => {
+            setSelectedCity(city);
+        
+            const updatedMostViewed = [city, ...mostViewedCities.filter(c => c.name !== city.name)];
+            if (updatedMostViewed.length > 3) {
+            updatedMostViewed.pop(); // Keep only the 3 most recent
+            }
+
+            setMostViewedCities(updatedMostViewed);
+            localStorage.setItem("mostViewedCities", JSON.stringify(updatedMostViewed));
+  };
+
+
 
     if (loading) {
         // Render a loading indicator while waiting for the API data
@@ -52,9 +70,17 @@ const WeatherApp = () => {
                     selectedVal={selectedCity ? selectedCity.name : ""}
                     handleChange={(val) => {
                         const city = cities.find((city) => city.name === val);
-                        setSelectedCity(city);
+                        handleCitySelect(city);
                     }}
                 />
+                </div>
+                <div className="suggestions">
+                    <h3>Most Viewed Cities:</h3>
+                    <ul>
+                        {mostViewedCities.map((city, index) => (
+                        <li key={index}>{city.name}</li>
+                        ))}
+                    </ul>
                 </div>
             </div>
             <div className="weather-info">
