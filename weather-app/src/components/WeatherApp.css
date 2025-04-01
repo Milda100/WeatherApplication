@@ -42,40 +42,6 @@
     color: var(--darkBrown);
 }
 
-.search-bar {
-    position: relative;
-}
-
-.search-bar input{
-    width: 250px;
-    height: 35px;
-    background-color: transparent;
-    border: 3px solid var(--darkBrown);
-    border-radius: 10px;
-    outline: none;
-    padding: 10px 30px 10px 10px;
-    font-size: 16px;
-    color: var(--darkBrown);
-}
-
-.search-bar input::placeholder {
-    color: var(--darkBrown);
-    font-size: 16px;
-}
-
-.search-bar input:focus::placeholder {
-    color: transparent;
-}
-
-.search-bar i {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    right: 15px;
-    font-size: 16px;
-    color: var(--darkBrown);
-    cursor: pointer;
-}
 
 .weather-info {
     position: absolute;

@@ -8,9 +8,10 @@ import SearchableDropdown from './SearchableDropdown'
 
 
 const WeatherApp = () => {
-    const [cities, setCities] = useState("Select option...");
+    const [cities, setCities] = useState([])
     const [loading, setLoading] = useState(true);
-
+    const [selectedCity, setSelectedCity] = useState(null);
+    
 
     useEffect(() => {
         const fetchCities = async () => {
@@ -28,7 +29,6 @@ const WeatherApp = () => {
         };
         fetchCities();
       }, []);
-    
 
     if (loading) {
         // Render a loading indicator while waiting for the API data
@@ -41,19 +41,24 @@ const WeatherApp = () => {
             <div className="search">
                 <div className="search-top">
                    <i className="fas fa-crosshairs"></i>
-                   <div className="location">Vilnius</div> 
+                   <div className="location">{selectedCity ? selectedCity.name : "Select a city"}</div> 
                 </div>
-                {/* <div className="search-bar"> */}
+                <div>
                 <SearchableDropdown
                     options={cities}
+                    onCitySelect={setSelectedCity}
                     label="name"
                     id="id"
-                    selectedVal={""}
-                    handleChange={(val) => {}}
-      />
+                    selectedVal={selectedCity ? selectedCity.name : ""}
+                    handleChange={(val) => {
+                        const city = cities.find((city) => city.name === val);
+                        setSelectedCity(city);
+                    }}
+                />
+                </div>
             </div>
             <div className="weather-info">
-                <img src={sunny} height="200" alt="sunny" className=""/>
+                <img src={sunny} alt="sunny" className=""/>
                 <div className="temperature">20°C</div>
                 <div className="description">Sunny</div>
                 <div className="humidity"><i className="fa fa-tint"></i>Humidity: 60%</div>
