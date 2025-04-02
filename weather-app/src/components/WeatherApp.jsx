@@ -1,6 +1,6 @@
 import sunny from '../assets/images/sunny.jpg'
 import cloudy from '../assets/images/cloudy.jpg'
-import rainny from '../assets/images/rainny.jpg'
+import rainy from '../assets/images/rainy.jpg'
 import snowy from '../assets/images/snowy.jpg'
 import foggy from '../assets/images/foggy.jpg'
 import { useState, useEffect } from 'react'
@@ -35,15 +35,28 @@ const WeatherApp = () => {
       }, []);
 
         const handleCitySelect = (city) => {
-            setSelectedCity(city);
-        
-            const updatedMostViewed = [city, ...mostViewedCities.filter(c => c.name !== city.name)];
-            if (updatedMostViewed.length > 3) {
-            updatedMostViewed.pop(); // Keep only the 3 most recent
-            }
+          setSelectedCity(city);
+          // Check if the selected city already exists in the state
+          const existingCity = mostViewedCities.find(c => c.name === city.name);
+          const currentCount = existingCity ? existingCity.viewCount : 0;
 
-            setMostViewedCities(updatedMostViewed);
-            localStorage.setItem("mostViewedCities", JSON.stringify(updatedMostViewed));
+           // Increment the view count for the selected city
+          const cityViewCount = { ...city, viewCount: currentCount + 1 };
+        
+        
+          const updatedMostViewed = [cityViewCount, ...mostViewedCities.filter(c => c.name !== city.name)];
+
+             // Sort the cities by view count in descending order
+          const sortedMostViewed = updatedMostViewed.sort((a, b) => b.viewCount - a.viewCount);
+
+            // Keep only the top 3 mostly viewed cities
+          const threeMostViewed = sortedMostViewed.slice(0, 3);
+
+
+          setMostViewedCities(threeMostViewed);
+          localStorage.setItem("mostViewedCities", JSON.stringify(threeMostViewed));
+          console.log("Updated most viewed cities:", threeMostViewed);
+
   };
 
 
@@ -77,9 +90,13 @@ const WeatherApp = () => {
                 <div className="suggestions">
                     <h3>Most Viewed Cities:</h3>
                     <ul>
-                        {mostViewedCities.map((city, index) => (
-                        <li key={index}>{city.name}</li>
-                        ))}
+                    {mostViewedCities.map((city) => (
+        <div key={city.name}>
+          <h3>{city.name}</h3>
+          <p>View Count: {city.viewCount}</p>
+        </div>
+      ))}
+
                     </ul>
                 </div>
             </div>
