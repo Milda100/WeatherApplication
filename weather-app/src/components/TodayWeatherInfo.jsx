@@ -11,11 +11,11 @@ const TodayWeatherInfo = ({ weather }) => {
     const currentWeather = weather[0]; // Today's weather is the first entry
 
     return (
-        <>
+        <div className="current-weather">
             <img
                 src={getWeatherIcon(currentWeather?.conditionCode || "default")}
                 alt={currentWeather?.conditionCode || "Unknown"}
-                className="weather-img"
+                className="current-weather-img"
             />
             <div className="temperature">
                 {currentWeather?.airTemperature
@@ -33,7 +33,7 @@ const TodayWeatherInfo = ({ weather }) => {
             <div className="wind-speed">
                 <i className="fas fa-wind"></i> Wind Speed: {currentWeather?.windSpeed || "No Data"} km/h
             </div>
-        </>
+        </div>
     );
 };
 

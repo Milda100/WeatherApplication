@@ -76,7 +76,7 @@ const WeatherApp = () => {
             <div className="weather-app">
                 <div className="search">
                     <div className="search-top">
-                        <i className="fas fa-crosshairs"></i>
+                        <i className="fa fa-crosshairs"></i>
                         <div className="location">{selectedCity ? selectedCity.name : "Select a city"}</div>
                     </div>
                     <div>

@@ -15,7 +15,7 @@ const FiveDayForecast = ({ forecast }) => {
                         src={getWeatherIcon(dayForecast?.conditionCode || 'default')}
                         alt={dayForecast?.conditionCode || 'Unknown'}
                         className="weather-img"
-                        height="50"
+                        
                     />
                     <div className="temperature">
                         {dayForecast?.airTemperature
