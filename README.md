@@ -11,7 +11,6 @@ The *Weather Application* is a web-based solution that provides real-time weathe
 - *Responsive Design*: Works on desktop and mobile devices.
 - *User-friendly Interface*: Simple and intuitive UI for quick access to weather data.
 
-
 ## Technologies Used
 
 - *Frontend*: React.js
