@@ -3,15 +3,61 @@ import cloudy from '../assets/images/cloudy.jpg'
 import rainy from '../assets/images/rainy.jpg'
 import snowy from '../assets/images/snowy.jpg'
 import foggy from '../assets/images/foggy.jpg'
+import sky from '../assets/images/sky.jpg'
 import { useState, useEffect } from 'react'
 import SearchableDropdown from './SearchableDropdown'
+import MostViewedCities from './MostViewedCities';
+
+const getWeatherIcon = (conditionCode) => {
+  switch (conditionCode) {
+      case 'clear': return sunny;
+      case 'cloudy': return cloudy;
+      case 'rainy': return rainy;
+      case 'snowy': return snowy;
+      case 'foggy': return foggy;
+      default: return sky;
+  }
+};
 
 
 const WeatherApp = () => {
     const [cities, setCities] = useState([])
     const [loading, setLoading] = useState(true);
-    const [selectedCity, setSelectedCity] = useState(null);
+    const [selectedCity, setSelectedCity] = useState({ 
+      name: 'Vilnius', 
+      code: 'vilnius' 
+  });
     const [mostViewedCities, setMostViewedCities] = useState([]);
+    const [weather, setWeather] = useState(null);
+
+    const currentDate = new Date();
+    const formattedDate = currentDate.toLocaleDateString('en-US', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long'
+    });
+    
+
+
+    const fetchWeather = async (cityCode) => {
+      const url = `https://api.allorigins.win/get?url=https://api.meteo.lt/v1/places/${cityCode}/forecasts/long-term`;
+      try {
+          const response = await fetch(url);
+          const data = await response.json();
+          const parsedData = JSON.parse(data.contents);
+          console.log('Fetched weather data:', parsedData);
+          
+          // Validate the presence of forecastTimestamps
+        if (parsedData && parsedData.forecastTimestamps && parsedData.forecastTimestamps.length > 0) {
+          setWeather(parsedData.forecastTimestamps[0]); // Update state with the first forecast
+          } else {
+              console.error('No forecast data found');
+          }
+      } catch (error) {
+                console.error('Error fetching weather data:', error);
+        }
+    };
+
     
 
     useEffect(() => {
@@ -23,7 +69,7 @@ const WeatherApp = () => {
             const parsedData = JSON.parse(data.contents);
             console.log(parsedData);
             setCities(parsedData);
-            setLoading(false); // Set loading to false after data is fetched
+            setLoading(false);
           } catch (error) {
             console.error('Error fetching weather data:', error);
           }
@@ -34,8 +80,16 @@ const WeatherApp = () => {
         setMostViewedCities(storedCities);
       }, []);
 
+      useEffect(() => {
+        if (selectedCity) {
+            fetchWeather(selectedCity.code);
+        }
+    }, [selectedCity]); // This ensures the weather is fetched whenever the selected city changes
+    
+
         const handleCitySelect = (city) => {
           setSelectedCity(city);
+
           // Check if the selected city already exists in the state
           const existingCity = mostViewedCities.find(c => c.name === city.name);
           const currentCount = existingCity ? existingCity.viewCount : 0;
@@ -62,7 +116,6 @@ const WeatherApp = () => {
 
 
     if (loading) {
-        // Render a loading indicator while waiting for the API data
         return <div>Loading...</div>;
       }    
 
@@ -88,27 +141,34 @@ const WeatherApp = () => {
                 />
                 </div>
                 <div className="suggestions">
-                    <h3>Most Viewed Cities:</h3>
-                    <ul>
-                    {mostViewedCities.map((city) => (
-        <div key={city.name}>
-          <h3>{city.name}</h3>
-          <p>View Count: {city.viewCount}</p>
-        </div>
-      ))}
-
-                    </ul>
+                  <MostViewedCities mostViewedCities={mostViewedCities} />
                 </div>
             </div>
             <div className="weather-info">
-                <img src={sunny} alt="sunny" className=""/>
-                <div className="temperature">20°C</div>
-                <div className="description">Sunny</div>
-                <div className="humidity"><i className="fa fa-tint"></i>Humidity: 60%</div>
-                <div className="wind-speed"><i className="fas fa-wind"></i>Wind Speed: 10 km/h</div>
+                {weather ? (
+                    <>
+                    <img
+                      src={getWeatherIcon(weather.conditionCode)}
+                      alt={weather.conditionCode}
+                      className="weather-img"
+                    />
+                        <div className="temperature">{Math.round(weather.airTemperature)}°C</div>
+                        <div className="description">
+                            {weather.conditionCode.replace('-', ' ').toUpperCase()}
+                        </div>
+                        <div className="humidity">
+                            <i className="fa fa-tint"></i> Humidity: {weather.relativeHumidity}%
+                        </div>
+                        <div className="wind-speed">
+                            <i className="fas fa-wind"></i> Wind Speed: {weather.windSpeed} km/h
+                        </div>
+                    </>
+                ) : (
+                    <div>No weather data available. Please select a city.</div>
+                )}
             </div>
             <div className="weather-date">
-                <p>Monday, 31 March</p>
+                <p>{formattedDate}</p>
             </div>
         </div>
     </div>
