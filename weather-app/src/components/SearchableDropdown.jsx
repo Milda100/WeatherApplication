@@ -41,6 +41,15 @@ const SearchableDropdown = ({
     );
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      const filteredOptions = filter(options);
+      if (filteredOptions.length > 0) {
+        selectOption(filteredOptions[0]); // Select the first option
+      }
+    }
+  }
+
   return (
     <div className="dropdown">
       <div className="control">
@@ -55,6 +64,7 @@ const SearchableDropdown = ({
               handleChange(null);
             }}
             onClick={toggle}
+            onKeyDown={handleKeyDown}
           />
         </div>
         <div className={`arrow ${isOpen ? "open" : ""}`}></div>

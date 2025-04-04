@@ -93,7 +93,10 @@ const WeatherApp = () => {
                         />
                     </div>
                     <div className="suggestions">
-                        <MostViewedCities mostViewedCities={mostViewedCities} />
+                        <MostViewedCities 
+                        mostViewedCities={mostViewedCities} 
+                        onCityClick={handleCitySelect}
+                        />
                     </div>
                 </div>
                 <div className="weather-info">
