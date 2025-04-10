@@ -1,12 +1,12 @@
-import WeatherApp from "./components/weatherApp"
-import "./components/weatherApp.css"
-import "./components/Dropdown.css"
+import WeatherApp from "./components/WeatherApp"
+import "./components/weatherApp.scss"
+import "./components/Dropdown.scss"
 
 
 
 const App = () => {
   return (
-    <div>
+    <div className="app-container">
         <WeatherApp />
     </div>
   )

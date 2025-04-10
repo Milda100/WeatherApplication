@@ -16,25 +16,77 @@ const getWeatherIcon = (conditionCode) => {
     }
 };
 
+const fetchFiveDayForecast = async (cityCode) => {
+    const url = `https://api.allorigins.win/get?url=https://api.meteo.lt/v1/places/${cityCode}/forecasts/long-term`;
+    
+    try {
+      const response = await fetch(url);  
+      const data = await response.json();
+      const weatherData = JSON.parse(data.contents);
+  
+      if (!weatherData.forecastTimestamps || weatherData.forecastTimestamps.length === 0) {
+        throw new Error("No forecast data received");
+      }
+  
+      // Group forecasts by date
+      const fiveDayForecast = weatherData.forecastTimestamps.reduce((acc, entry) => {
+        // Convert forecastTimeUtc to a Date object
+        const forecastDate = new Date(entry.forecastTimeUtc);
+    
+        // Format it to YYYY-MM-DD
+        const date = forecastDate.toISOString().split("T")[0];
+    
+        // Initialize the date key if it doesn't exist
+        if (!acc[date]) {
+            acc[date] = [];
+        }
+    
+        // Add the entry to the corresponding date's array
+        acc[date].push(entry);
+    
+        return acc;
+    }, {});
+    
+
+      console.log("Five-Day Forecast for real:", fiveDayForecast);
+      console.log("test:", Object.keys(fiveDayForecast));
+
+  
+      // Keep only the next 5 days
+      const today = new Date();
+      const fiveDayKeys = Object.keys(fiveDayForecast)
+        .filter(date => new Date(date) >= today) // Filter out past dates
+        .slice(0, 5); // Limit to 5 days
+  
+      const finalForecast = fiveDayKeys.map(date => ({
+        date,
+        forecasts: fiveDayForecast[date]
+      }));
+  
+      console.log("Five-Day Forecast Data:", finalForecast);
+      return finalForecast;
+    } catch (error) {
+      console.error('Error fetching forecast data:', error);
+      throw error;
+    }
+  };
+
 const fetchWeather = async (cityCode) => {
     const url = `https://api.allorigins.win/get?url=https://api.meteo.lt/v1/places/${cityCode}/forecasts/long-term`;
     try {
         const response = await fetch(url);
         const data = await response.json();
-        const parsedData = JSON.parse(data.contents);
+        const weatherData = JSON.parse(data.contents);
+        const currentDate = new Date();
 
-        if (parsedData && parsedData.forecastTimestamps) {
-            const groupedForecast = parsedData.forecastTimestamps.reduce((acc, timestamp) => {
-                const date = timestamp.forecastTimeUtc.split('T')[0];
-                if (!acc[date]) {
-                    acc[date] = timestamp;
-                }
-                return acc;
-            }, {});
-            return Object.values(groupedForecast).slice(0, 6); // Return five-day forecast
-        } else {
-            console.error('No forecast data found');
-            return null;
+        if (weatherData && weatherData.forecastTimestamps) {
+            const currentForecast = weatherData.forecastTimestamps.reduce((prev, curr) => {
+                const prevDiff = Math.abs(new Date(prev.forecastTimeUtc) - currentDate);
+                const currDiff = Math.abs(new Date(curr.forecastTimeUtc) - currentDate);
+                return currDiff < prevDiff ? curr : prev;
+              }, weatherData.forecastTimestamps[0]);
+              
+            return currentForecast; // Return current weather data
         }
     } catch (error) {
         console.error('Error fetching weather data:', error);
@@ -54,4 +106,4 @@ const fetchCities = async () => {
     }
 };
 
-export { getWeatherIcon, fetchWeather, fetchCities };
+export { getWeatherIcon, fetchWeather, fetchCities, fetchFiveDayForecast };

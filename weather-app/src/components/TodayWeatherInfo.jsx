@@ -4,18 +4,17 @@ import { getWeatherIcon } from './WeatherUtility';
 
 
 const TodayWeatherInfo = ({ weather }) => {
-    if (!weather || !Array.isArray(weather) || weather.length === 0) {
+    if (!weather) {
         return <div>No weather data available. Please select a city.</div>;
     }
 
-    const currentWeather = weather[0]; // Today's weather is the first entry
+    const currentWeather = weather; // Today's weather is the first entry
 
     return (
         <div className="current-weather">
             <img
                 src={getWeatherIcon(currentWeather?.conditionCode || "default")}
                 alt={currentWeather?.conditionCode || "Unknown"}
-                className="current-weather-img"
             />
             <div className="temperature">
                 {currentWeather?.airTemperature

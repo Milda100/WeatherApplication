@@ -3,13 +3,13 @@ import React from 'react';
 const MostViewedCities = ({ mostViewedCities, onCityClick }) => {
   return (
     <div className="suggestions">
-      <h3>Most Viewed Cities:</h3>
+      <h1>Most Viewed Cities:</h1>
       <ul>
         {mostViewedCities.map((city) => (
           <div key={city.name}>
-            <h3 onClick={() => onCityClick(city)}>
+            <h2 onClick={() => onCityClick(city)}>
               {city.name}
-            </h3>
+            </h2>
           </div>
         ))}
       </ul>
