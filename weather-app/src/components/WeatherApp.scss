@@ -26,6 +26,8 @@ $font-color: #333;
 $font-xlarge: 40px;
 $font-large: 20px;
 $font-medium: 15px;
+$font-small: 10px;
+
 $big-img: 150px;
 $small-img: 50px;
 
@@ -159,44 +161,48 @@ $transform: transform 0.3s ease, box-shadow 0.3s ease;
     margin-top: 20px;
     background: $primary-color;
     padding: 10px;
-    @include box-shape($inner-box-shadow);}
-
-.forecast-day {
-    flex: 1;
-    text-align: center;
-    padding: 10px;
-    background: $secondary-color;
     @include box-shape($inner-box-shadow);
-    transition: $transform;
 
-    &:hover {
-        @include hover();
-    }
-
-    h3 {
-        margin-bottom: 10px;
-        font-size: $font-medium;
-    }
-
-    img {
-        display: block;
-        margin: 0 auto;
-        width: $small-img;
-        height: $small-img;
+    .forecast-day {
+        flex: 1;
+        text-align: center;
+        padding: 10px;
+        background: $secondary-color;
         @include box-shape($inner-box-shadow);
+        transition: $transform;
+
+        &:hover {
+            @include hover();
         }
-    
-    .temperature {
-        margin-top: 10px 0;
-        font-size: $font-large;
-        font-weight: bold;
+
+        h3 {
+            margin-bottom: 10px;
+            font-size: $font-small;
         }
-    
-    .description {
-        margin-top: 5px;
-        font-size: $font-medium;
-        text-transform: capitalize;
-        }
+
+        img {
+            display: block;
+            margin: 10px auto;
+            width: $small-img;
+            height: $small-img;
+            @include box-shape($inner-box-shadow);
+            }
+        
+        .temperature {
+           
+            p {
+                font-size: $font-medium;
+                font-weight: bold;
+                margin: 0;
+            }
+            }
+        
+        .description {
+            margin-top: 5px;
+            font-size: $font-small;
+            text-transform: capitalize;
+            }
+    }
 }
 
 @media (max-width: 768px) {

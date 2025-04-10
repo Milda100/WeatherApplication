@@ -56,14 +56,35 @@ const fetchFiveDayForecast = async (cityCode) => {
       const today = new Date();
       const fiveDayKeys = Object.keys(fiveDayForecast)
         .filter(date => new Date(date) >= today) // Filter out past dates
-        .slice(0, 5); // Limit to 5 days
+        .slice(1, 6); // Limit to 5 days
   
-      const finalForecast = fiveDayKeys.map(date => ({
-        date,
-        forecasts: fiveDayForecast[date]
-      }));
+        const finalForecast = fiveDayKeys.map(date => {
+          const hourlyData = fiveDayForecast[date];
+        
+          // Calculate high and low temperatures
+          const highTemp = Math.max(...hourlyData.map(entry => entry.airTemperature));
+          const lowTemp = Math.min(...hourlyData.map(entry => entry.airTemperature));
+        
+          // Find the most frequent conditionCode
+          const conditionCounts = hourlyData.reduce((counts, entry) => {
+            counts[entry.conditionCode] = (counts[entry.conditionCode] || 0) + 1;
+            return counts;
+          }, {});
+          const dominantCondition = Object.keys(conditionCounts).reduce((a, b) =>
+            conditionCounts[a] > conditionCounts[b] ? a : b
+          );
+        
+          return {
+            date,
+            highTemp: highTemp.toFixed(1),
+            lowTemp: lowTemp.toFixed(1),
+            dominantCondition, // Most frequent conditionCode
+            forecasts: hourlyData // Preserve hourly details
+          };
+        });
+        
+        console.log("Final Forecast with Dominant Conditions:", finalForecast);
   
-      console.log("Five-Day Forecast Data:", finalForecast);
       return finalForecast;
     } catch (error) {
       console.error('Error fetching forecast data:', error);
