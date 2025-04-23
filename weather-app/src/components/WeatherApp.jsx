@@ -3,7 +3,7 @@ import SearchableDropdown from './SearchableDropdown';
 import MostViewedCities from './MostViewedCities';
 import TodayWeatherInfo from './TodayWeatherInfo';
 import FiveDayForcast from './FiveDayForcast';
-import { fetchWeather, fetchCities } from './WeatherUtility'; // Importing utility functions
+import { fetchWeather, fetchCities, fetchFiveDayForecast } from './WeatherUtility'; // Importing utility functions
 
 const WeatherApp = () => {
     const [cities, setCities] = useState([]);
@@ -14,6 +14,7 @@ const WeatherApp = () => {
     });
     const [mostViewedCities, setMostViewedCities] = useState([]);
     const [weather, setWeather] = useState(null);
+    const [fiveDayWeather, setFiveDayWeather] = useState(null); // State for five-day weather
 
     const currentDate = new Date();
     const formattedDate = currentDate.toLocaleDateString('en-US', {
@@ -49,6 +50,22 @@ const WeatherApp = () => {
         getWeather();
     }, [selectedCity]);
 
+    useEffect(() => {
+        const getFiveDayWeather = async () => {
+          if (selectedCity) {
+            try {
+              const forecast = await fetchFiveDayForecast(selectedCity.code);
+              console.log("Fetched Five-Day Forecast:", forecast);
+              setFiveDayWeather(forecast);
+            } catch (error) {
+              console.error("Error fetching five-day forecast:", error);
+            }
+          }
+        };
+      
+        getFiveDayWeather();
+      }, [selectedCity]);
+      
     // Handle city selection
     const handleCitySelect = (city) => {
         setSelectedCity(city);
@@ -72,7 +89,6 @@ const WeatherApp = () => {
     }
 
     return (
-        <div className="container">
             <div className="weather-app">
                 <div className="search">
                     <div className="search-top">
@@ -92,24 +108,23 @@ const WeatherApp = () => {
                             }}
                         />
                     </div>
-                    <div className="suggestions">
+                    <div>
                         <MostViewedCities 
                         mostViewedCities={mostViewedCities} 
                         onCityClick={handleCitySelect}
                         />
                     </div>
                 </div>
-                <div className="weather-info">
+                <div>
                     <TodayWeatherInfo weather={weather} />
                 </div>
                 <div className="weather-date">
                     <p>{formattedDate}</p>
                 </div>
-                <div className="five-day-weather">
-                    <FiveDayForcast forecast={weather} />
+                <div>
+                    <FiveDayForcast forecast={fiveDayWeather} />
                 </div>
             </div>
-        </div>
     );
 };
 

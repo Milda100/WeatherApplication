@@ -1,0 +1,212 @@
+//Mixins
+@mixin center-flex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+@mixin box-shape($shadow: $container-box-shadow) {
+    border-radius: $border-radius;
+    box-shadow: $shadow;
+  }
+
+@mixin hover {
+    transform: scale(1.05);
+    box-shadow: $hover-boxshadow;
+    cursor: pointer;
+}
+
+//variables
+$primary-color: #add8e6;
+$secondary-color: #ffffff;
+$container-secondary-color: hsl(35, 100%, 50%);
+$container-shadow-color: #2f2d2d;
+$font-color: #333;
+
+$font-xlarge: 40px;
+$font-large: 20px;
+$font-medium: 15px;
+$font-small: 10px;
+
+$big-img: 150px;
+$small-img: 50px;
+
+$border-radius: 10px;
+$container-box-shadow: 0 4px 20px $container-shadow-color;
+$inner-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+$hover-boxshadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+$transform: transform 0.3s ease, box-shadow 0.3s ease;
+
+
+
+
+
+//css
+  .app-container {
+    margin: 0 auto;
+    padding: 20px;
+    background-image: linear-gradient(to bottom, $primary-color, $container-secondary-color);
+    @include center-flex();
+    color: $font-color;
+  }
+
+
+.weather-app {
+    width: 70%;
+    background-image: linear-gradient(to right, $primary-color, $secondary-color);
+    padding: 20px;
+    @include box-shape();
+    
+}
+
+.search {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+}
+
+.search-top {
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
+    font-size: $font-large;
+}
+
+.location {
+    font-weight: bold;
+}
+
+.suggestions {
+    margin-top: 20px;
+    padding: 15px;
+    background: $primary-color;
+    @include box-shape($inner-box-shadow);
+
+    h1 {
+        margin-bottom: 10px;
+        font-size: $font-large;
+        text-align: left;
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+
+        div {
+            background: $secondary-color;
+            padding: 10px;
+            margin-bottom: 8px;
+            @include box-shape($inner-box-shadow);
+            transition: $transform;
+
+            &:hover {
+                @include hover();
+            }
+            
+            h2 {
+                font-size: $font-medium;
+                margin: 0;
+            }
+        }
+    }
+}
+
+.current-weather {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: $primary-color;
+    padding: 20px;
+    @include box-shape($inner-box-shadow);
+    margin: 20px 0;
+    text-align: center;
+
+    img {
+        width: $big-img;
+        height: $big-img;
+        @include box-shape($inner-box-shadow);
+    }
+
+    .temperature {
+        font-size: $font-xlarge;
+        font-weight: bold;
+        margin: 10px 0;
+    }
+
+    .description {
+        font-size: $font-large;
+        font-weight: 500;
+        margin-bottom: 15px;
+        text-transform: capitalize;
+    }
+
+    .humidity, .wind-speed {
+        font-size: $font-medium;
+        @include center-flex();
+        gap: 8px;
+        margin-bottom: 8px;
+    }
+}
+
+.weather-date {
+    text-align: center;
+    font-style: italic;
+}
+
+.five-day-weather {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin-top: 20px;
+    background: $primary-color;
+    padding: 10px;
+    @include box-shape($inner-box-shadow);
+
+    .forecast-day {
+        flex: 1;
+        text-align: center;
+        padding: 10px;
+        background: $secondary-color;
+        @include box-shape($inner-box-shadow);
+        transition: $transform;
+
+        &:hover {
+            @include hover();
+        }
+
+        h3 {
+            margin-bottom: 10px;
+            font-size: $font-small;
+        }
+
+        img {
+            display: block;
+            margin: 10px auto;
+            width: $small-img;
+            height: $small-img;
+            @include box-shape($inner-box-shadow);
+            }
+        
+        .temperature {
+           
+            p {
+                font-size: $font-medium;
+                font-weight: bold;
+                margin: 0;
+            }
+            }
+        
+        .description {
+            margin-top: 5px;
+            font-size: $font-small;
+            text-transform: capitalize;
+            }
+    }
+}
+
+@media (max-width: 768px) {
+    .five-day-weather {
+        flex-direction: column;
+    }
+}
